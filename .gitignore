@@ -1,0 +1,5 @@
+# Ignore detailed log files; keep directory
+log/*.log
+log/*.tmp
+*.tmp
+.DS_Store

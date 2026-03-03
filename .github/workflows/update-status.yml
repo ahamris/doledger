@@ -1,0 +1,37 @@
+name: Update STATUS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build STATUS.md
+        run: |
+          echo '# Devops Ledger — Consolidated Status' > STATUS.md
+          echo '' >> STATUS.md
+          echo 'Generated from all host ledgers (newest first by host).' >> STATUS.md
+          echo '' >> STATUS.md
+          for dir in */; do
+            host="${dir%/}"
+            if [[ "$host" != .github && -f "${dir}ledger.md" ]]; then
+              echo "## $host" >> STATUS.md
+              echo '' >> STATUS.md
+              cat "${dir}ledger.md" >> STATUS.md
+              echo '' >> STATUS.md
+            fi
+          done
+
+      - name: Commit STATUS.md
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add STATUS.md
+          git diff --staged --quiet || git commit -m "chore: update STATUS.md"
+          git push

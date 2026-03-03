@@ -1,0 +1,57 @@
+#!/bin/bash
+# do-log — Append a task to the DevOps ledger (LIFO) and sync to GitHub.
+# Usage: do-log "Task Description" "Success/Fail Details"
+
+set -e
+HOST=$(hostname)
+DOLEDGER=$(realpath /doledger 2>/dev/null || echo "/doledger")
+REPO_ROOT=$(realpath "$DOLEDGER/..")
+LEDGER="$DOLEDGER/ledger.md"
+LOG_DIR="$DOLEDGER/log"
+DATE=$(date "+%Y-%m-%d %H:%M")
+
+TASK="${1:-unknown task}"
+RESULT="${2:-—}"
+
+# Ensure ledger exists with header
+if [[ ! -f "$LEDGER" ]]; then
+  printf '| Date | Task | Result |\n|------|------|--------|\n\n' > "$LEDGER"
+fi
+
+# Ensure we have a table header (simple check)
+if ! grep -q '| Date |' "$LEDGER"; then
+  TEMP=$(mktemp)
+  printf '| Date | Task | Result |\n|------|------|--------|\n\n' > "$TEMP"
+  cat "$LEDGER" >> "$TEMP"
+  mv "$TEMP" "$LEDGER"
+fi
+
+# Prepend new row (LIFO)
+TEMP_LEDGER=$(mktemp)
+echo "| $DATE | $TASK | $RESULT |" > "$TEMP_LEDGER"
+cat "$LEDGER" >> "$TEMP_LEDGER"
+mv "$TEMP_LEDGER" "$LEDGER"
+
+# Optional: write to log/ for detailed backup
+if [[ -d "$LOG_DIR" ]]; then
+  LOG_FILE="$LOG_DIR/$(date +%Y-%m-%d-%H%M%S)-task.log"
+  printf '%s | %s | %s | %s\n' "$DATE" "$HOST" "$TASK" "$RESULT" >> "$LOG_FILE"
+fi
+
+# Git: commit and push only this host's directory
+if [[ ! -d "$REPO_ROOT/.git" ]]; then
+  echo "do-log: $REPO_ROOT is not a git repository. Skipping push." >&2
+  exit 0
+fi
+
+cd "$REPO_ROOT"
+git add "$HOST/"
+if git diff --staged --quiet; then
+  echo "do-log: No changes to commit."
+  exit 0
+fi
+git commit -m "Log: $TASK on $HOST"
+if ! git push origin main 2>/dev/null; then
+  echo "do-log: git push failed (e.g. no remote or auth). Ledger updated locally." >&2
+  exit 1
+fi
