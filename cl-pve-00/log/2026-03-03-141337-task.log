@@ -1,0 +1,1 @@
+2026-03-03 14:13 | cl-pve-00 | Configure Open WebUI to use LiteLLM (port 4000) | Success: OPENAI_API_BASE_URLS and OPENAI_API_KEYS in compose, container recreated; doc updated
