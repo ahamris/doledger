@@ -1,3 +1,4 @@
+| 2026-03-25 20:16 | Plan: Kerio + Cloudflare DNS sectie toegevoegd | Success: plan /root/.cursor/plans/kerio_connect_proxmox_vm_dfb64cae.plan.md bijgewerkt |
 | 2026-03-03 14:20 | TTS default voice set to nl-NL-ColetteNeural everywhere | Success: docs and baseline updated; script openclaw-tts-set-colette-ct200.sh for CT 200 |
 | 2026-03-03 14:13 | Configure Open WebUI to use LiteLLM (port 4000) | Success: OPENAI_API_BASE_URLS and OPENAI_API_KEYS in compose, container recreated; doc updated |
 | 2026-03-03 14:10 | Open WebUI v0.8.8 + Ollama config preserved on CT 201 | Success: Open WebUI image and stack v0.8.8; Ollama override re-applied, service restarted; binary still 0.16.1 |
