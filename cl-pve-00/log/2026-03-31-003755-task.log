@@ -1,0 +1,1 @@
+2026-03-31 00:37 | cl-pve-00 | Claude Code root fix: disable allowDangerouslySkipPermissions + workspace settings | Success: /opt/.vscode/settings.json, remote User/settings.json, managed-settings disableBypass; mkdir stubs; claude -p default works as root
