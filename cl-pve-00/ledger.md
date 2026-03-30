@@ -1,3 +1,4 @@
+| 2026-03-31 00:35 | Claude Code: create settings.json + plugins/cache + opt and etc paths | Success: minimal JSON and dirs under /root/.claude, /opt/.claude, /etc/claude-code |
 | 2026-03-26 00:06 | Move debian-13.4.0-amd64-netinst.iso jarvis -> local vz | Success: /var/lib/vz/template/iso/debian-13.4.0-amd64-netinst.iso |
 | 2026-03-25 22:03 | Kerio VM (106) UEFI efidisk + boot start | Success: efidisk0 created on vision (disk-2.raw), boot order ide2;scsi0, VM running |
 | 2026-03-25 22:00 | Kerio VM (106) created + Debian ISO attached | Started VM 106 (q35+OVMF) with disk0=100GB disk1=412GB; ISO mounted |
